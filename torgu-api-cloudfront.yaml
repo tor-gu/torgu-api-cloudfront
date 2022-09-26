@@ -17,6 +17,9 @@ Parameters:
     LoggingPrefixParam:
       Type: String
       Description: Prefix for logs, e.g. "api/" or "test-api/"
+    MunicipalitiesApiIdParam:
+      Type: String
+      Description: API ID for the Municipalities API      
     EnabledParam:
       AllowedValues:
       - "true"
@@ -81,7 +84,10 @@ Resources:
             Prefix: !Ref LoggingPrefixParam
         Origins:
         - Id: njmunicipalities-api
-          DomainName: njmunicipalities-api.tor-gu.com
+          DomainName: !Sub
+          - "${MunicipalitiesApiId}.execute-api.us-east-1.amazonaws.com"
+          - MunicipalitiesApiId: !Ref MunicipalitiesApiIdParam
+          OriginPath: /Prod
           CustomOriginConfig: 
             OriginProtocolPolicy: https-only
             OriginSSLProtocols: 
