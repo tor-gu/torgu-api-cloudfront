@@ -1,0 +1,26 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - pip install --upgrade pip
+      - pip install --upgrade awscli aws-sam-cli
+  build:
+    commands:
+      - . ./assume-role.sh ${ENV_PIPELINE_EXECUTION_ROLE} deploy
+      - sam deploy --stack-name ${ENV_STACK_NAME}
+                    --template ${ENV_TEMPLATE}
+                    --capabilities CAPABILITY_IAM
+                    --region ${ENV_REGION}
+                    --s3-bucket ${ENV_BUCKET}
+                    --no-fail-on-empty-changeset
+                    --role-arn ${ENV_CLOUDFORMATION_EXECUTION_ROLE}
+                    --parameter-overrides \
+                        HostedZoneNameParam=${ENV_HOSTED_ZONE}                \
+                        DomainNameParam=${ENV_DOMAIN_NAME}                    \
+                        CertIdParam=${ENV_CERT_ID}                            \
+                        LoggingBucketParam=${ENV_LOGGING_BUCKET}              \
+                        LoggingPrefixParam=${ENV_LOGGING_PREFIX}              \
+                        MunicipalitiesApiIdParam=${ENV_MUNICIPALITIES_API_ID} \
+                        ElectionsApiIdParam=${ENV_ELECTIONS_API_ID}
