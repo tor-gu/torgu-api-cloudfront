@@ -20,6 +20,9 @@ Parameters:
     MunicipalitiesApiIdParam:
       Type: String
       Description: API ID for the Municipalities API      
+    ElectionsApiIdParam:
+      Type: String
+      Description: API ID for the Municipalities API      
     EnabledParam:
       AllowedValues:
       - "true"
@@ -92,6 +95,15 @@ Resources:
             OriginProtocolPolicy: https-only
             OriginSSLProtocols: 
             - TLSv1.2
+        - Id: njelections-api
+          DomainName: !Sub
+          - "${ElectionsApiId}.execute-api.us-east-1.amazonaws.com"
+          - ElectionsApiId: !Ref ElectionsApiIdParam
+          OriginPath: /Prod
+          CustomOriginConfig: 
+            OriginProtocolPolicy: https-only
+            OriginSSLProtocols: 
+            - TLSv1.2
         CacheBehaviors:
         - PathPattern: /nj/counties/*
           TargetOriginId: njmunicipalities-api
@@ -101,6 +113,12 @@ Resources:
           Compress: true
         - PathPattern: /nj/municipalities/*
           TargetOriginId: njmunicipalities-api
+          CachePolicyId: !Ref QueryStringsCachePolicy
+          OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
+          ViewerProtocolPolicy: https-only
+          Compress: true
+        - PathPattern: /nj/elections/*
+          TargetOriginId: njelections-api
           CachePolicyId: !Ref QueryStringsCachePolicy
           OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
           ViewerProtocolPolicy: https-only

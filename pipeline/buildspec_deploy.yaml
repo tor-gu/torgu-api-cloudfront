@@ -1,0 +1,25 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - pip install --upgrade pip
+      - pip install --upgrade awscli
+  build:
+    commands:
+      - . ./assume-role.sh ${ENV_PIPELINE_EXECUTION_ROLE} deploy
+      - aws cloudformation deploy --template-file ${ENV_TEMPLATE}
+                    --stack-name ${ENV_STACK_NAME}
+                    --capabilities CAPABILITY_IAM
+                    --region ${ENV_REGION}
+                    --role-arn ${ENV_CLOUDFORMATION_EXECUTION_ROLE}
+                    --no-fail-on-empty-changeset
+                    --parameter-overrides \
+                        HostedZoneNameParam=${ENV_HOSTED_ZONE_NAME}           \
+                        DomainNameParam=${ENV_DOMAIN_NAME}                    \
+                        CertIdParam=${ENV_CERT_ID}                            \
+                        LoggingBucketParam=$LoggingBucket                     \
+                        LoggingPrefixParam=$LoggingPrefix                     \
+                        MunicipalitiesApiIdParam=$MunicipalitiesApiIdParam    \
+                        ElectionsApiIdParam=$ElectionsApiId
