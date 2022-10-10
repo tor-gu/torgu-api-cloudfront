@@ -160,19 +160,6 @@ Resources:
               RunOrder: 2 # keeping run order as 2 in case manual approval is enabled
               Configuration:
                 ProjectName: !Ref CodeBuildProjectDeploy
-                EnvironmentVariables: !Sub |
-                  [
-                    {"name": "ENV_TEMPLATE", "value": "torgu-api-cloudfront.yaml"},
-                    {"name": "ENV_CURRENT_STACK", "value": "${AWS::StackName}"},
-                    {"name": "ENV_REGION", "value": "${Region}"},
-                    {"name": "ENV_STACK_NAME", "value": "${DeployStackName}"},
-                    {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${PipelineExecutionRole}"},
-                    {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${CloudFormationExecutionRole}"},
-                    {"name": "ENV_BUCKET", "value": "${ArtifactBucket}"},
-                    {"name": "ENV_HOSTED_ZONE_NAME", "value": "${HostedZoneNameParam}"},
-                    {"name": "ENV_DOMAIN_NAME", "value": "${DomainNameParam}"},
-                    {"name": "ENV_CERT_ID", "value": "${CertIdParam}"}
-                  ]
               InputArtifacts:
                 - Name: SourceCodeAsZip
 
@@ -414,6 +401,27 @@ Resources:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
+        EnvironmentVariables:
+          - Name: ENV_TEMPLATE
+            Value: torgu-api-cloudfront.yaml
+          - Name: ENV_CURRENT_STACK
+            Value: !Ref AWS::StackName
+          - Name: ENV_REGION
+            Value: !Ref Region
+          - Name: ENV_STACK_NAME
+            Value: !Ref DeployStackName
+          - Name: ENV_PIPELINE_EXECUTION_ROLE
+            Value: !Ref PipelineExecutionRole
+          - Name: ENV_CLOUDFORMATION_EXECUTION_ROLE
+            Value: !Ref CloudFormationExecutionRole
+          - Name: ENV_BUCKET
+            Value: !Ref ArtifactBucket
+          - Name: ENV_HOSTED_ZONE_NAME
+            Value: !Ref HostedZoneNameParam
+          - Name: ENV_DOMAIN_NAME
+            Value: !Ref DomainNameParam
+          - Name: ENV_CERT_ID
+            Value: !Ref CertIdParam
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: CODEPIPELINE
