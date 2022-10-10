@@ -8,21 +8,21 @@ phases:
       - pip install --upgrade awscli aws-sam-cli
   pre_build:
     commands:
-      - export ElectionsApiId="$(aws cloudformation describe-stacks \
-                                    --stack-name ${ENV_STACK_NAME} \
-                                    --region ${ENV_REGION} \
+      - export ElectionsApiId="$(aws cloudformation describe-stacks 
+                                    --stack-name ${ENV_STACK_NAME} 
+                                    --region ${ENV_REGION} 
                                     --query "Stacks[0].Outputs[?OutputKey=='ElectionsApiIdParam'].OutputValue" --output text)"
-      - export MunicipalitiesApiId="$(aws cloudformation describe-stacks \
-                                    --stack-name ${ENV_STACK_NAME} \
-                                    --region ${ENV_REGION} \
+      - export MunicipalitiesApiId="$(aws cloudformation describe-stacks 
+                                    --stack-name ${ENV_STACK_NAME} 
+                                    --region ${ENV_REGION} 
                                     --query "Stacks[0].Outputs[?OutputKey=='MunicipalitiesApiIdParam'].OutputValue" --output text)"
-      - export LoggingBucket="$(aws cloudformation describe-stacks \
-                                    --stack-name ${ENV_STACK_NAME} \
-                                    --region ${ENV_REGION} \
+      - export LoggingBucket="$(aws cloudformation describe-stacks 
+                                    --stack-name ${ENV_STACK_NAME} 
+                                    --region ${ENV_REGION} 
                                     --query "Stacks[0].Outputs[?OutputKey=='LoggingBucketParam'].OutputValue" --output text)"
-      - export LoggingPrefix="$(aws cloudformation describe-stacks \
-                                    --stack-name ${ENV_STACK_NAME} \
-                                    --region ${ENV_REGION} \
+      - export LoggingPrefix="$(aws cloudformation describe-stacks 
+                                    --stack-name ${ENV_STACK_NAME} 
+                                    --region ${ENV_REGION} 
                                     --query "Stacks[0].Outputs[?OutputKey=='LoggingPrefixParam'].OutputValue" --output text)"
   build:
     commands:
