@@ -167,7 +167,7 @@ Resources:
                     {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${PipelineExecutionRole}"},
                     {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${CloudFormationExecutionRole}"},
                     {"name": "ENV_BUCKET", "value": "${ArtifactBucket}"},
-                    {"name": "ENV_HOSTED_NAME", "value": "${HostedZoneNameParam}"},
+                    {"name": "ENV_HOSTED_ZONE, "value": "${HostedZoneNameParam}"},
                     {"name": "ENV_DOMAIN_NAME", "value": "${DomainNameParam}"},
                     {"name": "ENV_CERT_ID", "value": "${CertIdParam}"}
                   ]

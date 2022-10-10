@@ -27,15 +27,13 @@ phases:
   build:
     commands:
       - . ./assume-role.sh ${ENV_PIPELINE_EXECUTION_ROLE} deploy
-      - sam deploy --stack-name ${ENV_STACK_NAME}
-                    --template ${ENV_TEMPLATE}
+      - aws cloudformation deploy --template-file ${ENV_TEMPLATE}
+                    --stack-name ${ENV_STACK_NAME}
                     --capabilities CAPABILITY_IAM
                     --region ${ENV_REGION}
-                    --s3-bucket ${ENV_BUCKET}
-                    --no-fail-on-empty-changeset
                     --role-arn ${ENV_CLOUDFORMATION_EXECUTION_ROLE}
                     --parameter-overrides \
-                        HostedZoneNameParam=${ENV_HOSTED_ZONE}                \
+                        HostedZoneNameParam=${ENV_HOSTED_ZONE_NAME}           \
                         DomainNameParam=${ENV_DOMAIN_NAME}                    \
                         CertIdParam=${ENV_CERT_ID}                            \
                         LoggingBucketParam=$LoggingBucket                     \
