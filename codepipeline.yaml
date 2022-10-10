@@ -122,6 +122,7 @@ Resources:
                     "CodeStarConnectionArn": "${CodeStarConnectionArn}",
                     "PipelineExecutionRole": "${PipelineExecutionRole}",
                     "CloudFormationExecutionRole": "${CloudFormationExecutionRole}",
+                    "DeployStackName": "${DeployStackName}",
                     "HostedZoneNameParam": "${HostedZoneNameParam}",
                     "DomainNameParam": "${DomainNameParam}",
                     "CertIdParam": "${CertIdParam}",
