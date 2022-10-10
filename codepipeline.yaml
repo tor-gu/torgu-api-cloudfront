@@ -163,6 +163,7 @@ Resources:
                 EnvironmentVariables: !Sub |
                   [
                     {"name": "ENV_TEMPLATE", "value": "torgu-api-cloudfront.yaml"},
+                    {"name": "ENV_CURRENT_STACK", "value": "${AWS::StackName}"},
                     {"name": "ENV_REGION", "value": "${Region}"},
                     {"name": "ENV_STACK_NAME", "value": "${DeployStackName}"},
                     {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${PipelineExecutionRole}"},
