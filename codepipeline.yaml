@@ -120,6 +120,7 @@ Resources:
                 ParameterOverrides: !Sub |
                   {
                     "CodeStarConnectionArn": "${CodeStarConnectionArn}",
+                    "MainGitBranch": "${MainGitBranch}",
                     "PipelineExecutionRole": "${PipelineExecutionRole}",
                     "CloudFormationExecutionRole": "${CloudFormationExecutionRole}",
                     "DeployStackName": "${DeployStackName}",
@@ -428,6 +429,9 @@ Outputs:
     Condition: CreateConnection
     Description: The Arn of AWS CodeStar Connection used to connect to external code repositories.
     Value: !Ref CodeStarConnection
+  MainGitBranch:
+    Description: Git repository branch
+    Value: !Ref MainGitBranch
   PipelineExecutionRole:
     Description: Execution role for pipeline
     Value: !Ref PipelineExecutionRole
