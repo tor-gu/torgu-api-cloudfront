@@ -383,6 +383,15 @@ Resources:
                   - "s3:PutObject"
                 Resource:
                   - !Sub "arn:${AWS::Partition}:s3:::${PipelineArtifactsBucket}/*"
+        - PolicyName: CodeBuildDescribeStacks
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - "cloudformation:DescribeStacks"
+                Resource:
+                  - !Sub "arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/AWS::StackName/*"
         - PolicyName: AssumeStagePipExecutionRoles
           PolicyDocument:
             Version: "2012-10-17"
