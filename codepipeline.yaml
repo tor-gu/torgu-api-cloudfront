@@ -422,6 +422,14 @@ Resources:
             Value: !Ref DomainNameParam
           - Name: ENV_CERT_ID
             Value: !Ref CertIdParam
+          - Name: ENV_LOGGING_BUCKET
+            Value: !Ref LoggingBucketParam
+          - Name: ENV_LOGGING_PREFIX
+            Value: !Ref LoggingPrefixParam
+          - Name: ENV_MUNICIPALITIES_API_ID
+            Value: !Ref MunicipalitiesApiIdParam
+          - Name: ENV_ELECTIONS_API_ID
+            Value: !Ref ElectionsApiIdParam
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: CODEPIPELINE

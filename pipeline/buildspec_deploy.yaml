@@ -32,6 +32,7 @@ phases:
                     --capabilities CAPABILITY_IAM
                     --region ${ENV_REGION}
                     --role-arn ${ENV_CLOUDFORMATION_EXECUTION_ROLE}
+                    --no-fail-on-empty-changeset
                     --parameter-overrides \
                         HostedZoneNameParam=${ENV_HOSTED_ZONE_NAME}           \
                         DomainNameParam=${ENV_DOMAIN_NAME}                    \
