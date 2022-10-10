@@ -19,7 +19,7 @@ phases:
                         HostedZoneNameParam=${ENV_HOSTED_ZONE_NAME}           \
                         DomainNameParam=${ENV_DOMAIN_NAME}                    \
                         CertIdParam=${ENV_CERT_ID}                            \
-                        LoggingBucketParam=$LoggingBucket                     \
-                        LoggingPrefixParam=$LoggingPrefix                     \
-                        MunicipalitiesApiIdParam=$MunicipalitiesApiIdParam    \
-                        ElectionsApiIdParam=$ElectionsApiId
+                        LoggingBucketParam=${ENV_LOGGING_BUCKET}              \
+                        LoggingPrefixParam=${ENV_LOGGING_PREFIX}              \
+                        MunicipalitiesApiIdParam=${ENV_MUNICIPALITIES_API_ID} \
+                        ElectionsApiIdParam=${ENV_ELECTIONS_API_ID}
