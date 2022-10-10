@@ -47,13 +47,13 @@ Parameters:
     Default: ""
   LoggingPrefixParam:
     Type: String
-    Defauilt: ""
+    Default: ""
   MunicipalitiesApiIdParam:
     Type: String
     Default: ""
   ElectionsApiIdParam:
     Type: String
-    Defauilt: ""
+    Default: ""
 
 
 Conditions:
@@ -128,7 +128,7 @@ Resources:
                     "LoggingBucketParam": "${LoggingBucketParam}",
                     "LoggingPrefixParam": "${LoggingPrefixParam}",
                     "MunicipalitiesApiIdParam": "${MunicipalitiesApiIdParam}",
-                    "ElectionsApiIdParam": "${ElectionsApiIdParam}",
+                    "ElectionsApiIdParam": "${ElectionsApiIdParam}"
                   }
               InputArtifacts:
                 - Name: SourceCodeAsZip
@@ -169,11 +169,7 @@ Resources:
                     {"name": "ENV_BUCKET", "value": "${ArtifactBucket}"},
                     {"name": "ENV_HOSTED_NAME", "value": "${HostedZoneNameParam}"},
                     {"name": "ENV_DOMAIN_NAME", "value": "${DomainNameParam}"},
-                    {"name": "ENV_CERT_ID", "value": "${CertIdParam}"},
-                    {"name": "ENV_LOGGING_BUCKET", "value": "${LoggingBucketParam}"},
-                    {"name": "ENV_LOGGING_PREFIX", "value": "${LoggingPrefixParam}"},
-                    {"name": "ENV_MUNICIPALITIES_API_ID", "value": "${MunicipalitiesApiIdParam}"},
-                    {"name": "ENV_ELECTIONS_API_ID", "value": "${ElectionsApiIdParam}"},
+                    {"name": "ENV_CERT_ID", "value": "${CertIdParam}"}
                   ]
               InputArtifacts:
                 - Name: SourceCodeAsZip
@@ -306,8 +302,6 @@ Resources:
                   - "codebuild:StartBuild"
                   - "codebuild:BatchGetBuilds"
                 Resource:
-                  - !GetAtt CodeBuildProjectUnitTest.Arn
-                  - !GetAtt CodeBuildProjectBuildAndPackage.Arn
                   - !GetAtt CodeBuildProjectDeploy.Arn
               - Effect: Allow
                 Action:

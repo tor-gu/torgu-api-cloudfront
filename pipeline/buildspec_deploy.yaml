@@ -6,6 +6,24 @@ phases:
     commands:
       - pip install --upgrade pip
       - pip install --upgrade awscli aws-sam-cli
+  pre_build:
+    commands:
+      - export ElectionsApiId="$(aws cloudformation describe-stacks \
+                                    --stack-name ${ENV_STACK_NAME} \
+                                    --region ${ENV_REGION} \
+                                    --query "Stacks[0].Outputs[?OutputKey=='ElectionsApiIdParam'].OutputValue" --output text)"
+      - export MunicipalitiesApiId="$(aws cloudformation describe-stacks \
+                                    --stack-name ${ENV_STACK_NAME} \
+                                    --region ${ENV_REGION} \
+                                    --query "Stacks[0].Outputs[?OutputKey=='MunicipalitiesApiIdParam'].OutputValue" --output text)"
+      - export LoggingBucket="$(aws cloudformation describe-stacks \
+                                    --stack-name ${ENV_STACK_NAME} \
+                                    --region ${ENV_REGION} \
+                                    --query "Stacks[0].Outputs[?OutputKey=='LoggingBucketParam'].OutputValue" --output text)"
+      - export LoggingPrefix="$(aws cloudformation describe-stacks \
+                                    --stack-name ${ENV_STACK_NAME} \
+                                    --region ${ENV_REGION} \
+                                    --query "Stacks[0].Outputs[?OutputKey=='LoggingPrefixParam'].OutputValue" --output text)"
   build:
     commands:
       - . ./assume-role.sh ${ENV_PIPELINE_EXECUTION_ROLE} deploy
@@ -20,7 +38,7 @@ phases:
                         HostedZoneNameParam=${ENV_HOSTED_ZONE}                \
                         DomainNameParam=${ENV_DOMAIN_NAME}                    \
                         CertIdParam=${ENV_CERT_ID}                            \
-                        LoggingBucketParam=${ENV_LOGGING_BUCKET}              \
-                        LoggingPrefixParam=${ENV_LOGGING_PREFIX}              \
-                        MunicipalitiesApiIdParam=${ENV_MUNICIPALITIES_API_ID} \
-                        ElectionsApiIdParam=${ENV_ELECTIONS_API_ID}
+                        LoggingBucketParam=$LoggingBucket                     \
+                        LoggingPrefixParam=$LoggingPrefix                     \
+                        MunicipalitiesApiIdParam=$MunicipalitiesApiIdParam    \
+                        ElectionsApiIdParam=$ElectionsApiId
