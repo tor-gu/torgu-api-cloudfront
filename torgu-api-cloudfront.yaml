@@ -128,7 +128,6 @@ Resources:
           CachePolicyId: !Ref QueryStringsCachePolicy
           OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
           ViewerProtocolPolicy: https-only
-          ViewerProtocolPolicy: https-only
           Compress: true
       Tags:
         - Key: project
