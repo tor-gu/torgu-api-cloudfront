@@ -7,6 +7,7 @@ LoggingPrefixParam=api/
 EnabledParam=true
 # NjMunicipalitiesApi (njmunicipalities-api, prod)
 MunicipalitiesApiIdParam=uw0paa9zbg
+# NjoaguofApi (njoaguof-api, prod)
+UseOfForceApiIdParam=roas9hw78j
 # na: placeholder origin until the prod API exists
 ElectionsApiIdParam=na
-UseOfForceApiIdParam=na
