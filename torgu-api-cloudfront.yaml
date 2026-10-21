@@ -19,10 +19,13 @@ Parameters:
       Description: Prefix for logs, e.g. "api/" or "test-api/"
     MunicipalitiesApiIdParam:
       Type: String
-      Description: API ID for the Municipalities API      
+      Description: API ID for the Municipalities API
     ElectionsApiIdParam:
       Type: String
-      Description: API ID for the Municipalities API      
+      Description: API ID for the Elections API ("na" for a placeholder origin)
+    UseOfForceApiIdParam:
+      Type: String
+      Description: API ID for the Use of Force API ("na" for a placeholder origin)
     EnabledParam:
       AllowedValues:
       - "true"
@@ -104,7 +107,23 @@ Resources:
             OriginProtocolPolicy: https-only
             OriginSSLProtocols: 
             - TLSv1.2
+        - Id: njoaguof-api
+          DomainName: !Sub
+          - "${UseOfForceApiId}.execute-api.us-east-1.amazonaws.com"
+          - UseOfForceApiId: !Ref UseOfForceApiIdParam
+          OriginPath: /Prod
+          CustomOriginConfig: 
+            OriginProtocolPolicy: https-only
+            OriginSSLProtocols: 
+            - TLSv1.2
+        # Every API path has an explicit route; none relies on the default.
         CacheBehaviors:
+        - PathPattern: /nj/counties
+          TargetOriginId: njmunicipalities-api
+          CachePolicyId: !Ref QueryStringsCachePolicy
+          OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
+          ViewerProtocolPolicy: https-only
+          Compress: true
         - PathPattern: /nj/counties/*
           TargetOriginId: njmunicipalities-api
           CachePolicyId: !Ref QueryStringsCachePolicy
@@ -117,8 +136,26 @@ Resources:
           OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
           ViewerProtocolPolicy: https-only
           Compress: true
+        - PathPattern: /nj/municipalities
+          TargetOriginId: njmunicipalities-api
+          CachePolicyId: !Ref QueryStringsCachePolicy
+          OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
+          ViewerProtocolPolicy: https-only
+          Compress: true
+        - PathPattern: /nj/municipality_xrefs/*
+          TargetOriginId: njmunicipalities-api
+          CachePolicyId: !Ref QueryStringsCachePolicy
+          OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
+          ViewerProtocolPolicy: https-only
+          Compress: true
         - PathPattern: /nj/elections/*
           TargetOriginId: njelections-api
+          CachePolicyId: !Ref QueryStringsCachePolicy
+          OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
+          ViewerProtocolPolicy: https-only
+          Compress: true
+        - PathPattern: /nj/use_of_force/*
+          TargetOriginId: njoaguof-api
           CachePolicyId: !Ref QueryStringsCachePolicy
           OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
           ViewerProtocolPolicy: https-only

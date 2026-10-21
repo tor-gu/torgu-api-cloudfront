@@ -1,0 +1,79 @@
+# Plan and deploy the CloudFront distributions: dev branch -> TorguApiTest
+# (test-api.tor-gu.com), main -> TorguApi (api.tor-gu.com) after approval.
+#
+# AWS access is through OIDC roles defined in infra/github/. The plan job uses
+# the readonly role; the deploy job runs in the GitHub environment dev or prod
+# and uses that environment's deploy role. The prod environment requires a
+# reviewer, so a run on main stops before deploying until the plan job's
+# summary has been checked and the run approved.
+#
+# Settings (stack names, role ARNs) are in pipeline/env/*.env, and the stack
+# parameters (API IDs, certificates, ...) in pipeline/env/*.params.
+
+name: deploy
+
+on:
+  push:
+    branches: [dev, main]
+
+permissions:
+  id-token: write
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # What the deploy job will change, written to the job summary. Read this
+  # before approving a prod deploy.
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: pipeline/load_env.sh
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ env.READONLY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          mask-aws-account-id: false
+      - run: aws cloudformation validate-template --template-body "file://$TEMPLATE" > /dev/null
+      - run: pipeline/plan.sh | tee -a "$GITHUB_STEP_SUMMARY"
+
+  # aws cloudformation deploy waits for the stack, and so for CloudFront to
+  # finish deploying the distribution: several minutes.
+  deploy:
+    needs: plan
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+    concurrency:
+      group: deploy-${{ github.ref_name }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: pipeline/load_env.sh
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ env.DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          mask-aws-account-id: false
+      - name: cloudformation deploy
+        run: |
+          mapfile -t params < <(pipeline/params.sh "$ENV")
+          aws cloudformation deploy --template-file "$TEMPLATE" \
+                                    --stack-name "$STACK_NAME" \
+                                    --region "$AWS_REGION" \
+                                    --role-arn "$CFN_EXECUTION_ROLE_ARN" \
+                                    --no-fail-on-empty-changeset \
+                                    --parameter-overrides "${params[@]}"
+
+  # Every route answers through the distribution. Dev only: in prod some
+  # origins are still placeholders.
+  smoke_test:
+    needs: deploy
+    if: github.ref_name == 'dev'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: pipeline/load_env.sh
+      - run: pipeline/smoke_test.sh

@@ -1,0 +1,13 @@
+# Stack parameters for TorguApiTest (test-api.tor-gu.com), one Key=Value per line
+HostedZoneNameParam=tor-gu.com.
+DomainNameParam=test-api.tor-gu.com
+CertIdParam=e2a62fb1-164f-481b-8074-96dfbecd61e9
+LoggingBucketParam=tor-gu-site-logs
+LoggingPrefixParam=test-api/
+EnabledParam=true
+# NjMunicipalitiesApiDev (njmunicipalities-api, dev)
+MunicipalitiesApiIdParam=w322cwgyw9
+# NJElectionsApi (dev)
+ElectionsApiIdParam=zkl6ac2r2a
+# NjoaguofApiDev (njoaguof-api, dev)
+UseOfForceApiIdParam=vyjcjki7qi

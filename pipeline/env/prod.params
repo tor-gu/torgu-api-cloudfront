@@ -1,0 +1,12 @@
+# Stack parameters for TorguApi (api.tor-gu.com), one Key=Value per line
+HostedZoneNameParam=tor-gu.com.
+DomainNameParam=api.tor-gu.com
+CertIdParam=cd793a95-e4eb-4291-ba9f-ad6a072f7aea
+LoggingBucketParam=tor-gu-site-logs
+LoggingPrefixParam=api/
+EnabledParam=true
+# NjMunicipalitiesApi (njmunicipalities-api, prod)
+MunicipalitiesApiIdParam=uw0paa9zbg
+# na: placeholder origin until the prod API exists
+ElectionsApiIdParam=na
+UseOfForceApiIdParam=na
