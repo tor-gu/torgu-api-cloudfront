@@ -26,6 +26,9 @@ Parameters:
     UseOfForceApiIdParam:
       Type: String
       Description: API ID for the Use of Force API ("na" for a placeholder origin)
+    LeaApiIdParam:
+      Type: String
+      Description: API ID for the LEA API ("na" for a placeholder origin)
     EnabledParam:
       AllowedValues:
       - "true"
@@ -112,9 +115,18 @@ Resources:
           - "${UseOfForceApiId}.execute-api.us-east-1.amazonaws.com"
           - UseOfForceApiId: !Ref UseOfForceApiIdParam
           OriginPath: /Prod
-          CustomOriginConfig: 
+          CustomOriginConfig:
             OriginProtocolPolicy: https-only
-            OriginSSLProtocols: 
+            OriginSSLProtocols:
+            - TLSv1.2
+        - Id: njlea-api
+          DomainName: !Sub
+          - "${LeaApiId}.execute-api.us-east-1.amazonaws.com"
+          - LeaApiId: !Ref LeaApiIdParam
+          OriginPath: /Prod
+          CustomOriginConfig:
+            OriginProtocolPolicy: https-only
+            OriginSSLProtocols:
             - TLSv1.2
         # Every API path has an explicit route; none relies on the default.
         CacheBehaviors:
@@ -156,6 +168,12 @@ Resources:
           Compress: true
         - PathPattern: /nj/use_of_force/*
           TargetOriginId: njoaguof-api
+          CachePolicyId: !Ref QueryStringsCachePolicy
+          OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
+          ViewerProtocolPolicy: https-only
+          Compress: true
+        - PathPattern: /nj/lea/*
+          TargetOriginId: njlea-api
           CachePolicyId: !Ref QueryStringsCachePolicy
           OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
           ViewerProtocolPolicy: https-only

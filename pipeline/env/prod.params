@@ -11,3 +11,5 @@ MunicipalitiesApiIdParam=uw0paa9zbg
 UseOfForceApiIdParam=roas9hw78j
 # na: placeholder origin until the prod API exists
 ElectionsApiIdParam=na
+# na: placeholder origin until the prod API exists
+LeaApiIdParam=na
