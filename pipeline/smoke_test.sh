@@ -16,6 +16,7 @@ paths=(
     /nj/use_of_force/attributes
     "/nj/use_of_force/counts/incidents?by=year"
     /nj/lea/agencies
+    "/nj/officer_diversity/counts/officers?by=year"
 )
 
 failed=0

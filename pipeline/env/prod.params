@@ -13,5 +13,5 @@ UseOfForceApiIdParam=roas9hw78j
 ElectionsApiIdParam=na
 # NjleaApi (njlea-api, prod)
 LeaApiIdParam=0sfcwavjsl
-# na: placeholder origin until the prod API exists
-OfficerDiversityApiIdParam=na
+# NjoagleodApi (njoagleod-api, prod)
+OfficerDiversityApiIdParam=8vlkdgyc71
