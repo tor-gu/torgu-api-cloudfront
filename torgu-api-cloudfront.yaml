@@ -29,6 +29,9 @@ Parameters:
     LeaApiIdParam:
       Type: String
       Description: API ID for the LEA API ("na" for a placeholder origin)
+    OfficerDiversityApiIdParam:
+      Type: String
+      Description: API ID for the Officer Diversity API ("na" for a placeholder origin)
     EnabledParam:
       AllowedValues:
       - "true"
@@ -128,6 +131,15 @@ Resources:
             OriginProtocolPolicy: https-only
             OriginSSLProtocols:
             - TLSv1.2
+        - Id: njoagleod-api
+          DomainName: !Sub
+          - "${OfficerDiversityApiId}.execute-api.us-east-1.amazonaws.com"
+          - OfficerDiversityApiId: !Ref OfficerDiversityApiIdParam
+          OriginPath: /Prod
+          CustomOriginConfig:
+            OriginProtocolPolicy: https-only
+            OriginSSLProtocols:
+            - TLSv1.2
         # Every API path has an explicit route; none relies on the default.
         CacheBehaviors:
         - PathPattern: /nj/counties
@@ -174,6 +186,12 @@ Resources:
           Compress: true
         - PathPattern: /nj/lea/*
           TargetOriginId: njlea-api
+          CachePolicyId: !Ref QueryStringsCachePolicy
+          OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
+          ViewerProtocolPolicy: https-only
+          Compress: true
+        - PathPattern: /nj/officer_diversity/*
+          TargetOriginId: njoagleod-api
           CachePolicyId: !Ref QueryStringsCachePolicy
           OriginRequestPolicyId: !Ref QueryStringsOriginRequestPolicy
           ViewerProtocolPolicy: https-only
